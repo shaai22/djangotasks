@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Список дел</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <form action="{% url 'create_task' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3 mt-3">
+              <label for="task-title" class="form-label">Добавление задачи:</label>
+              <input type="text" class="form-control" id="task-title" placeholder="Введите название" name="task-title">
+            </div>
+            <button type="submit" class="btn btn-primary">Добавить</button>
+          </form>
+          <br>
+          <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">№ п/п</th>
+                        <th scope="col">Название</th>
+                        <th scope="col">Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</td>
+                        <td>{{ task.title }}</td>
+                        <td>
+                            {% if task.completed %}
+                            <a href="#" class="btn btn-primary active" role="button">Завершено</a>
+                            {% else %}
+                            <a class="btn btn-primary" href="{% url 'finish_task' task.id %}" role="button">Завершить</a>
+                            {% endif %}
+                            <a class="btn btn-primary" href="{% url 'delete_task' task.id %}" role="button">Удалить</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+          </div>
+      </div>
+</body>
+</html>
