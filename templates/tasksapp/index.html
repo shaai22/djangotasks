@@ -31,10 +31,16 @@
                     {% for task in tasks %}
                     <tr>
                         <td scope="row">{{ forloop.counter }}</td>
-                        <td>{{ task.title }}</td>
+                        <td>
+                            <form action="{% url 'edit_task' task.id %}" method="POST">
+                                {% csrf_token %}
+                                <input type="text" name="new-text" value="{{ task.title }}">
+                                <button type="submit" class="btn btn-primary">Переименовать</button>
+                            </form>
+                        </td>
                         <td>
                             {% if task.completed %}
-                            <a href="#" class="btn btn-primary active" role="button">Завершено</a>
+                            <a class="btn btn-primary" href="{% url 'finish_task' task.id %}" role="button">Завершено</a>
                             {% else %}
                             <a class="btn btn-primary" href="{% url 'finish_task' task.id %}" role="button">Завершить</a>
                             {% endif %}

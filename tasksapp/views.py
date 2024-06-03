@@ -19,7 +19,7 @@ def create_task(request):
 
 def finish_task(request, task_id):
     task = Task.objects.get(id = task_id)
-    task.completed = True
+    task.completed = not task.completed
     task.save()
     
     return redirect('task_list')
@@ -28,4 +28,16 @@ def delete_task(request, task_id):
     task = Task.objects.get(id = task_id)
     task.delete()
     
+    return redirect('task_list')
+
+def edit_task(request, task_id):
+    if request.method == 'POST':
+        newtext = request.POST.get('new-text')
+        if not newtext:
+            pass
+        else:
+            task = Task.objects.get(id = task_id)
+            task.title = newtext
+            task.save()
+
     return redirect('task_list')
